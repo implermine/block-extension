@@ -1,37 +1,43 @@
-package team.flow.blockextension.domain.fixedExtensions;
+package team.flow.blockextension.domain.entity;
 
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
-@NoArgsConstructor
+@Getter
+@Setter
 @Entity
 public class FixedExtensions {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(columnDefinition = "boolean default false")
     private Boolean bat;
 
-    @Column(columnDefinition = "boolean default false")
     private Boolean cmd;
 
-    @Column(columnDefinition = "boolean default false")
     private Boolean com;
 
-    @Column(columnDefinition = "boolean default false")
     private Boolean cpl;
 
-    @Column(columnDefinition = "boolean default false")
     private Boolean exe;
 
-    @Column(columnDefinition = "boolean default false")
     private Boolean scr;
 
-    @Column(columnDefinition = "boolean default false")
     private Boolean js;
+
+    public FixedExtensions() {
+        this.bat = Boolean.FALSE;
+        this.cmd = Boolean.FALSE;
+        this.com = Boolean.FALSE;
+        this.cpl = Boolean.FALSE;
+        this.exe = Boolean.FALSE;
+        this.scr = Boolean.FALSE;
+        this.js = Boolean.FALSE;
+    }
 
     @Builder
     public FixedExtensions(Boolean bat, Boolean cmd, Boolean com, Boolean cpl, Boolean exe, Boolean scr, Boolean js) {

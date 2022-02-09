@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="utf-8">
     <title>HTML</title>
@@ -9,6 +9,75 @@
             font-family: Consolas, sans-serif;
         }
     </style>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            console.log("hello")
+        })
+
+        function check(box) {
+
+            console.log(box.value)
+
+            var payload = {
+                "checkedValue" : box.value,
+                "isChecked" : box.checked
+            }
+
+            $.ajax(
+                {
+                    url: "/check/fix",
+                    data: JSON.stringify(payload),
+                    method: "POST",
+                    dataType: "json",
+                    contentType:'application/json'
+                }
+            )
+        }
+
+        function add(){
+            const name = document.getElementById("extension-text-box").value;
+
+            var payload = {
+                "name" : name
+            }
+
+            $.ajax(
+                {
+                    url: "/check/custom",
+                    data: JSON.stringify(payload),
+                    method: "POST",
+                    dataType: "json",
+                    contentType:'application/json',
+                    async:false
+                }
+            )
+
+            location.reload();
+        }
+
+        function del(name){
+
+            var payload = {
+                "name" : name
+            }
+
+            $.ajax(
+                {
+                    url: "/check/custom",
+                    data: JSON.stringify(payload),
+                    method: "DELETE",
+                    dataType: "json",
+                    contentType:'application/json',
+                    async:false
+                }
+            )
+            // 여기 errorHandling (중복)
+
+            location.reload();
+        }
+
+    </script>
 </head>
 <body>
 <table>
@@ -16,25 +85,25 @@
         <th style="padding-right: 50px"> 고정확장자</th>
         <th>
             <label style="padding-right: 15px">
-                <input type="checkbox" value="bat"> bat
+                <input type="checkbox" value="bat" onclick="check(this)" th:checked="${bat}"> bat
             </label>
             <label style="padding-right: 15px">
-                <input type="checkbox" value="cmd"> cmd
+                <input type="checkbox" value="cmd" onclick="check(this)" th:checked="${cmd}"> cmd
             </label>
             <label style="padding-right: 15px">
-                <input type="checkbox" value="com"> com
+                <input type="checkbox" value="com" onclick="check(this)" th:checked="${com}"> com
             </label>
             <label style="padding-right: 15px">
-                <input type="checkbox" value="com"> cpl
+                <input type="checkbox" value="cpl" onclick="check(this)" th:checked="${cpl}"> cpl
             </label>
             <label style="padding-right: 15px">
-                <input type="checkbox" value="com"> exe
+                <input type="checkbox" value="exe" onclick="check(this)" th:checked="${exe}"> exe
             </label>
             <label style="padding-right: 15px">
-                <input type="checkbox" value="com"> scr
+                <input type="checkbox" value="scr" onclick="check(this)" th:checked="${scr}"> scr
             </label>
             <label style="padding-right: 15px">
-                <input type="checkbox" value="com"> js
+                <input type="checkbox" value="js" onclick="check(this)" th:checked="${js}"> js
             </label>
         </th>
     </tr>
@@ -43,12 +112,12 @@
         <th style="padding-right: 50px"> 커스텀 확장자</th>
         <th>
             <label style="text-align: left">
-                <input type="text" placeholder="확장자 입력" style="width: 98%;">
+                <input type="text" id="extension-text-box" placeholder="확장자 입력" style="width: 98%;">
             </label>
         </th>
         <th>
             <label>
-                <input type="button" value="+추가">
+                <input type="button" value="+추가" onclick="add()">
             </label>
         </th>
     </tr>
@@ -59,24 +128,21 @@
 
         <th>
             <div style="border:1px solid; padding: 10px; height: 200px">
+                <table>
+                    <tr>
+                        <th th:text = "${#lists.size(names)} + '/200'">
+                        </th>
+                    </tr>
+                    <tr th:each ="name : ${names}">
+                        <th style="border:1px solid ;padding: 10px">
+                            <div th:text = "${name}"></div>
+                            <input type="button" value="x" th:onclick="del( [[${name}]] );">
+                        </th>
+                    </tr>
+                </table>
             </div>
         </th>
     </tr>
 </table>
-
-<!--<div>-->
-<!--    <p style="float: left; padding-right: 50px">고정 확장자</p>-->
-<!--    <label style="float: left; padding-top: 15px; padding-right: 25px"><input type="checkbox" value="bat"> bat</label>-->
-<!--    <label style="float: left; padding-top: 15px; padding-right: 25px"><input type="checkbox" value="red"> cmd</label>-->
-<!--    <label style="float: left; padding-top: 15px; padding-right: 25px"><input type="checkbox" value="red"> com</label>-->
-<!--    <label style="float: left; padding-top: 15px; padding-right: 25px"><input type="checkbox" value="red"> cpl</label>-->
-<!--    <label style="float: left; padding-top: 15px; padding-right: 25px"><input type="checkbox" value="red"> exe</label>-->
-<!--    <label style="float: left; padding-top: 15px; padding-right: 25px"><input type="checkbox" value="red"> scr</label>-->
-<!--    <label style="float: left; padding-top: 15px; padding-right: 25px"><input type="checkbox" value="red"> js</label>-->
-<!--</div>-->
-<!--<div>-->
-<!--    <p style="float: start; padding-right: 50px">커스텀 확장자</p>-->
-
-</div>
 </body>
 </html>
