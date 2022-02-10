@@ -1,0 +1,17 @@
+package team.flow.blockextension.exception;
+
+import org.springframework.http.HttpStatus;
+
+public class ApiRequestException extends IllegalArgumentException{
+
+    private final HttpStatus httpStatus;
+
+    public ApiRequestException(String message, HttpStatus httpStatus) {
+        super(message);
+        this.httpStatus = httpStatus;
+    }
+
+    public HttpStatus getHttpStatus() {
+        return httpStatus;
+    }
+}

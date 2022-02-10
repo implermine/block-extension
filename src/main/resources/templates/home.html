@@ -20,13 +20,13 @@
             console.log(box.value)
 
             var payload = {
-                "checkedValue" : box.value,
+                "name" : box.value,
                 "isChecked" : box.checked
             }
 
             $.ajax(
                 {
-                    url: "/check/fix",
+                    url: "/extension/fix",
                     data: JSON.stringify(payload),
                     method: "POST",
                     dataType: "json",
@@ -44,12 +44,14 @@
 
             $.ajax(
                 {
-                    url: "/check/custom",
+                    url: "/extension/custom",
                     data: JSON.stringify(payload),
                     method: "POST",
-                    dataType: "json",
                     contentType:'application/json',
-                    async:false
+                    async:false,
+                    error: function(data){
+                        alert(data.responseJSON.message)
+                    }
                 }
             )
 
@@ -64,7 +66,7 @@
 
             $.ajax(
                 {
-                    url: "/check/custom",
+                    url: "/extension/custom",
                     data: JSON.stringify(payload),
                     method: "DELETE",
                     dataType: "json",
@@ -85,25 +87,25 @@
         <th style="padding-right: 50px"> 고정확장자</th>
         <th>
             <label style="padding-right: 15px">
-                <input type="checkbox" value="bat" onclick="check(this)" th:checked="${bat}"> bat
+                <input type="checkbox" value="bat" onclick="check(this)" th:checked="${userExtensionsResponse.bat}"> bat
             </label>
             <label style="padding-right: 15px">
-                <input type="checkbox" value="cmd" onclick="check(this)" th:checked="${cmd}"> cmd
+                <input type="checkbox" value="cmd" onclick="check(this)" th:checked="${userExtensionsResponse.cmd}"> cmd
             </label>
             <label style="padding-right: 15px">
-                <input type="checkbox" value="com" onclick="check(this)" th:checked="${com}"> com
+                <input type="checkbox" value="com" onclick="check(this)" th:checked="${userExtensionsResponse.com}"> com
             </label>
             <label style="padding-right: 15px">
-                <input type="checkbox" value="cpl" onclick="check(this)" th:checked="${cpl}"> cpl
+                <input type="checkbox" value="cpl" onclick="check(this)" th:checked="${userExtensionsResponse.cpl}"> cpl
             </label>
             <label style="padding-right: 15px">
-                <input type="checkbox" value="exe" onclick="check(this)" th:checked="${exe}"> exe
+                <input type="checkbox" value="exe" onclick="check(this)" th:checked="${userExtensionsResponse.exe}"> exe
             </label>
             <label style="padding-right: 15px">
-                <input type="checkbox" value="scr" onclick="check(this)" th:checked="${scr}"> scr
+                <input type="checkbox" value="scr" onclick="check(this)" th:checked="${userExtensionsResponse.scr}"> scr
             </label>
             <label style="padding-right: 15px">
-                <input type="checkbox" value="js" onclick="check(this)" th:checked="${js}"> js
+                <input type="checkbox" value="js" onclick="check(this)" th:checked="${userExtensionsResponse.js}"> js
             </label>
         </th>
     </tr>
@@ -130,13 +132,13 @@
             <div style="border:1px solid; padding: 10px; height: 200px">
                 <table>
                     <tr>
-                        <th th:text = "${#lists.size(names)} + '/200'">
+                        <th th:text = "${#lists.size(userExtensionsResponse.customExtensions)} + '/200'">
                         </th>
                     </tr>
-                    <tr th:each ="name : ${names}">
+                    <tr th:each ="customExtension : ${userExtensionsResponse.customExtensions}">
                         <th style="border:1px solid ;padding: 10px">
-                            <div th:text = "${name}"></div>
-                            <input type="button" value="x" th:onclick="del( [[${name}]] );">
+                            <div th:text = "${customExtension}"></div>
+                            <input type="button" value="x" th:onclick="del( [[${customExtension}]] );">
                         </th>
                     </tr>
                 </table>

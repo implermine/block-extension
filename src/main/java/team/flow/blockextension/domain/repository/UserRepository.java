@@ -7,5 +7,4 @@ import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByIdentifier(String identifier);
-    //TODO: 이거 identifier를 unique로 두던가, 아님 pk로 잡아야될듯
 }

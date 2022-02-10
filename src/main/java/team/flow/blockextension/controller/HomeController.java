@@ -5,8 +5,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.servlet.ModelAndView;
 import team.flow.blockextension.domain.service.UserService;
-import team.flow.blockextension.dto.UserCheckedExtensionsDto;
+import team.flow.blockextension.dto.UserExtensionsResponse;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -19,29 +20,25 @@ public class HomeController {
 
 
     @GetMapping("/")
-    public String home(@CookieValue(value="identifier", required = false) Cookie cookie,
+    public ModelAndView home(@CookieValue(value="identifier", required = false) Cookie cookie,
                        HttpServletResponse response, Model model){
 
-        UserCheckedExtensionsDto userCheckedExtensionsDto;
+        ModelAndView mav = new ModelAndView("home");
+        UserExtensionsResponse userExtensionsResponse;
 
-        if (cookie == null){
+        // 최초 사용자라면
+        if (cookie == null) {
             String identifier = userService.createUserAndGetHisIdentifier();
-            userCheckedExtensionsDto = userService.getUserCheckedExtensions(identifier);
             Cookie newCookie = new Cookie("identifier", identifier);
-            newCookie.setMaxAge(60*3);
+            newCookie.setMaxAge(60*15);
             response.addCookie(newCookie);
+            userExtensionsResponse = userService.getUserExtensionsByIdentifier(identifier);
         }else{
-            userCheckedExtensionsDto = userService.getUserCheckedExtensions(cookie.getValue());
+            userExtensionsResponse = userService.getUserExtensionsByIdentifier(cookie.getValue());
         }
 
-        model.addAttribute("bat",userCheckedExtensionsDto.getBat());
-        model.addAttribute("cmd",userCheckedExtensionsDto.getCmd());
-        model.addAttribute("com",userCheckedExtensionsDto.getCom());
-        model.addAttribute("cpl",userCheckedExtensionsDto.getCpl());
-        model.addAttribute("exe",userCheckedExtensionsDto.getExe());
-        model.addAttribute("scr",userCheckedExtensionsDto.getScr());
-        model.addAttribute("js",userCheckedExtensionsDto.getJs());
-        model.addAttribute("names", userCheckedExtensionsDto.getCustomExtensions());
-        return "home";
+        mav.addObject("userExtensionsResponse", userExtensionsResponse);
+
+        return mav;
     }
 }

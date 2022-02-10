@@ -1,11 +1,10 @@
 package team.flow.blockextension.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import team.flow.blockextension.domain.service.ExtensionService;
-import team.flow.blockextension.dto.CheckCustomRequestDto;
-import team.flow.blockextension.dto.CheckFixRequestDto;
+import team.flow.blockextension.dto.CustomExtensionRequest;
+import team.flow.blockextension.dto.FixedExtensionRequest;
 
 import javax.servlet.http.Cookie;
 
@@ -15,20 +14,23 @@ public class ExtensionController {
 
     private final ExtensionService extensionService;
 
-    @PostMapping("/check/fix")
-    public void check_fix(@CookieValue(value="identifier", required = false) Cookie cookie, @RequestBody CheckFixRequestDto requestDto){
+    @PostMapping("/extension/fix")
+    public void check_fix(@CookieValue(value = "identifier", required = false) Cookie cookie,
+                          @RequestBody FixedExtensionRequest fixedExtensionRequest){
 
-        extensionService.updateFixedExtension(cookie.getValue(), requestDto.getCheckedValue(), requestDto.getIsChecked());
+        extensionService.updateFixedExtension(cookie.getValue(), fixedExtensionRequest);
     }
 
-    @PostMapping("/check/custom")
-    public void check_custom(@CookieValue(value="identifier", required=false ) Cookie cookie, @RequestBody CheckCustomRequestDto requestDto){
-        extensionService.createCustomExtension(cookie.getValue(), requestDto.getName());
+    @PostMapping("/extension/custom")
+    public void check_custom(@CookieValue(value = "identifier", required = false) Cookie cookie,
+                             @RequestBody CustomExtensionRequest customExtensionRequest) {
+        extensionService.createCustomExtension(cookie.getValue(), customExtensionRequest);
     }
 
-    @DeleteMapping("/check/custom")
-    public void delete_custom(@CookieValue(value="identifier", required=false ) Cookie cookie, @RequestBody CheckCustomRequestDto requestDto){
-        extensionService.deleteCustomExtension(cookie.getValue(), requestDto.getName());
+    @DeleteMapping("/extension/custom")
+    public void delete_custom(@CookieValue(value = "identifier", required = false) Cookie cookie,
+                              @RequestBody CustomExtensionRequest customExtensionRequest) {
+        extensionService.deleteCustomExtension(cookie.getValue(), customExtensionRequest);
     }
 
 }

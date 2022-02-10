@@ -6,6 +6,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CheckCustomRequestDto {
+public class CustomExtensionRequest {
     private String name;
 }

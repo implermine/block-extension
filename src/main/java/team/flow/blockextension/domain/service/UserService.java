@@ -7,7 +7,7 @@ import team.flow.blockextension.domain.entity.FixedExtensions;
 import team.flow.blockextension.domain.repository.FixedExtensionsRepository;
 import team.flow.blockextension.domain.entity.User;
 import team.flow.blockextension.domain.repository.UserRepository;
-import team.flow.blockextension.dto.UserCheckedExtensionsDto;
+import team.flow.blockextension.dto.UserExtensionsResponse;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -42,15 +42,18 @@ public class UserService {
      * 최초 방문자가 아닐 시, 가져온 identifier정보로 User를 조회해서, 해당 User의 데이터들을 호출하여 앞단에 뿌려줍니다.
      */
     @Transactional(readOnly = true)
-    public UserCheckedExtensionsDto getUserCheckedExtensions(
+    public UserExtensionsResponse getUserExtensionsByIdentifier(
             String identifier
     ) {
-        User user = userRepository.findByIdentifier(identifier).get();
-        UserCheckedExtensionsDto userCheckedExtensionsDto = new UserCheckedExtensionsDto();
-        userCheckedExtensionsDto.fromFixedExtensions(user.getFixedExtensions());
-        userCheckedExtensionsDto.fromCustomExtensions(user.getCustomExtensionList());
-
-        return userCheckedExtensionsDto;
+        Optional<User> userOptional = userRepository.findByIdentifier(identifier);
+        UserExtensionsResponse userExtensionsResponse = new UserExtensionsResponse();
+        userOptional.ifPresent(
+                user -> {
+                    userExtensionsResponse.fromFixedExtensions(user.getFixedExtensions());
+                    userExtensionsResponse.fromCustomExtensions(user.getCustomExtensionList());
+                }
+        );
+        return userExtensionsResponse;
     }
 
 

@@ -1,7 +1,8 @@
 package team.flow.blockextension.dto;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import team.flow.blockextension.domain.entity.CustomExtension;
 import team.flow.blockextension.domain.entity.FixedExtensions;
 
@@ -9,8 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+@NoArgsConstructor
+@Setter
 @Getter
-public class UserCheckedExtensionsDto {
+public class UserExtensionsResponse {
 
     // bat를 check 하였는지
     private Boolean bat;
