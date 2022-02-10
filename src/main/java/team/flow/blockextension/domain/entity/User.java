@@ -20,7 +20,7 @@ public class User {
     @Column(nullable = false)
     private String identifier;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "user")
     private final List<CustomExtension> customExtensionList = new ArrayList<>();
 
 

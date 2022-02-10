@@ -108,9 +108,13 @@ public class ExtensionService {
         userOptional.ifPresent(
                 user -> {
                     List<CustomExtension> customExtensionList = user.getCustomExtensionList();
-                    customExtensionList.removeIf(customExtension -> customExtension.getName().equals(customExtensionRequest.getName()));
+                    for (CustomExtension customExtension : customExtensionList) {
+                        if(customExtension.getName().equals(customExtensionRequest.getName())){
+                            customExtensionRepository.delete(customExtension);
+                            break;
+                        }
+                    }
                 }
-
         );
     }
 }
